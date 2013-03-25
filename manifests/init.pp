@@ -1,9 +1,19 @@
 class lsb {
   package {
     'lsb':
-      name => $::operatingsystem ? {
-        /(?i-mx:debian|ubuntu)/ => 'lsb-core',
-        /(?i-mx:redhat|centos)/ => 'redhat-lsb',
+      name => $::osfamily ? {
+        'Debian' => 'lsb-core',
+        'RedHat' => 'redhat-lsb-core',
       };
   }
+}
+
+define lsb::config::profile (
+  $content,
+  $order = '50'
+  ) {
+  file { "/etc/profile.d/${order}-${name}":
+    content => $content,
+  }
+
 }
